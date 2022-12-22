@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Epilogue", sans-serif;
+}
+
+.register {
+    background-color: rgb(28, 27, 27);
+    height: 100vh;
+}
+
+.hardhatIcon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 50px;
+}
