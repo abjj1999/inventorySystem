@@ -1,27 +1,28 @@
-import React from 'react'
-import { Form, Input, Card, Spin, message } from 'antd'
+import React, { useContext } from 'react'
 import { SiWolframlanguage } from 'react-icons/si'
-import { BiLoaderAlt } from 'react-icons/bi'
-import Link from 'next/link'
+import { Card, Form, Input, message, Spin } from 'antd'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-const register = () => {
+import Link from 'next/link'
+import { userContext } from '../context/auth-context'
+
+const Login = () => {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
+  const [state, setState] = useContext(userContext)
   const onFinish = async (values) => {
-    const doesnotmatch = document.getElementById('doesnotmatch')
-    if (values.password !== values.confirmPassword) {
-      // message.error("Passwords don't match")
-      doesnotmatch.innerHTML = "Passwords don't match"
-    }
-    doesnotmatch.innerHTML = ''
     try {
       setLoading(true)
-      const data = await axios.post('/api/auth/register', values)
+      const data = await axios.post('/api/auth/login', values)
       setLoading(false)
-      message.success("You're registered successfully")
+      message.success('Login successful')
+      setState({ user: data.data.data, token: data.data.token })
+      window.localStorage.setItem(
+        'auth',
+        JSON.stringify({ user: data.data.data, token: data.data.token }),
+      )
       values = {}
-      router.push('/login')
+      // router.push('/user/dashboard')
     } catch (error) {
       message.error(error.message)
     }
@@ -46,19 +47,6 @@ const register = () => {
         </div>
         <div className="d-flex justify-content-center align-items-center flex-column">
           <Form onFinish={onFinish} className="w-100">
-            <div className="form-group mb-3">
-              <label htmlFor="name">
-                name <span className="text-danger">*</span>
-              </label>
-              <Form.Item name="name">
-                <Input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  placeholder="Name"
-                />
-              </Form.Item>
-            </div>
             <div className="form-group mb-3">
               <label htmlFor="email">
                 Email <span className="text-danger">*</span>
@@ -85,21 +73,7 @@ const register = () => {
                 />
               </Form.Item>
             </div>
-            <div className="form-group mb-3">
-              <label htmlFor="password">
-                {' '}
-                Confirm password <span className="text-danger">*</span>
-              </label>
-              <Form.Item name="confirmPassword">
-                <Input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  placeholder="Password"
-                />
-                <span id="doesnotmatch" className="text-danger"></span>
-              </Form.Item>
-            </div>
+
             <div className="form-group  d-flex justify-content-start align-items-center ">
               {loading ? (
                 <Spin className="fs-1" />
@@ -122,4 +96,4 @@ const register = () => {
   )
 }
 
-export default register
+export default Login
