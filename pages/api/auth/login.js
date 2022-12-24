@@ -1,7 +1,8 @@
 import dbConnect from '../../../lib/Dbconnect'
 import User from '../../../models/User'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
+import { serialize } from 'cookie'
 
 export default async function handler(req, res) {
   const { method } = req
@@ -20,13 +21,27 @@ export default async function handler(req, res) {
         res.status(400).json({ success: false, message: 'Invalid credentials' })
       }
 
-      const token = jwt.sign(
-        { userId: foundUser._id },
-        process.env.JWT_SECRET,
+      const token = sign(
         {
-          expiresIn: '7d',
-        },
+          exp: Math.floor(Date.now() / 1000) + 60, // 1 minute
+          _id: foundUser._id,
+          name: foundUser.name,
+        }, 
+        process.env.JWT_SECRET,
+
       )
+
+      const serializedToken = serialize('auth', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'development',
+        sameSite: 'strict',
+        maxAge: 60,
+        path: '/',
+      })
+
+      res.setHeader('Set-Cookie', serializedToken)
+
+     
       foundUser.password = undefined
       res.status(200).json({ success: true, data: foundUser, token })
     } catch (err) {

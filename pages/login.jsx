@@ -4,25 +4,31 @@ import { Card, Form, Input, message, Spin } from 'antd'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { userContext } from '../context/auth-context'
+
 
 const Login = () => {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
-  const [state, setState] = useContext(userContext)
+  // const [state, setState] = useContext(userContext)
+  const handleuserInfo = async () => {
+    try {
+      const data = await axios.get('/api/user')
+      console.log(data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const onFinish = async (values) => {
     try {
       setLoading(true)
       const data = await axios.post('/api/auth/login', values)
       setLoading(false)
       message.success('Login successful')
-      setState({ user: data.data.data, token: data.data.token })
-      window.localStorage.setItem(
-        'auth',
-        JSON.stringify({ user: data.data.data, token: data.data.token }),
-      )
+      // setState({ user: data.data.data, token: data.data.token })
+      
       values = {}
       // router.push('/user/dashboard')
+      router.push('/dashboard/main')
     } catch (error) {
       message.error(error.message)
     }
@@ -42,7 +48,7 @@ const Login = () => {
         className="m-2 col-lg-6 col-md-8 col-sm-10"
       >
         <div className=" d-flex  align-items-center justify-content-center mb-2 ">
-          <h3 className="text-center">Register</h3>
+          <h3 className="text-center">Login</h3>
           <SiWolframlanguage className="hardhatIcon m-1" />
         </div>
         <div className="d-flex justify-content-center align-items-center flex-column">
@@ -79,19 +85,20 @@ const Login = () => {
                 <Spin className="fs-1" />
               ) : (
                 <button type="submit" className="btn btn-primary ">
-                  Register
+                  Login
                 </button>
               )}
             </div>
           </Form>
           <p className="fw-bold mt-4">
-            Already have an account? &nbsp;
-            <Link className="text-primary text-decoration-none" href="/login">
-              Login
+            Don't have an account?{' '}
+            <Link className="text-primary text-decoration-none" href="/register">
+              Register
             </Link>
           </p>
         </div>
       </Card>
+      
     </div>
   )
 }
