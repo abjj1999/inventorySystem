@@ -21,25 +21,6 @@ export default async function handler(req, res) {
         res.status(400).json({ success: false, message: 'Invalid credentials' })
       }
 
-      const token = sign(
-        {
-          exp: Math.floor(Date.now() / 1000) + 60, // 1 minute
-          _id: foundUser._id,
-          name: foundUser.name,
-        }, 
-        process.env.JWT_SECRET,
-
-      )
-
-      const serializedToken = serialize('auth', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== 'development',
-        sameSite: 'strict',
-        maxAge: 60,
-        path: '/',
-      })
-
-      res.setHeader('Set-Cookie', serializedToken)
 
      
       foundUser.password = undefined

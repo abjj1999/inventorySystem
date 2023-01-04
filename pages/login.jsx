@@ -4,31 +4,34 @@ import { Card, Form, Input, message, Spin } from 'antd'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { signIn, useSession } from 'next-auth/react'
+
 
 
 const Login = () => {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
+  const {data: session, status} = useSession()
   // const [state, setState] = useContext(userContext)
-  const handleuserInfo = async () => {
-    try {
-      const data = await axios.get('/api/user')
-      console.log(data.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  
   const onFinish = async (values) => {
     try {
       setLoading(true)
-      const data = await axios.post('/api/auth/login', values)
+      // const data = await axios.post('/api/auth/login', values)
+      const res = await signIn("credentials", {
+        email: values.email, 
+        password: values.password,
+        redirect: false,
+      })
+      console.log(res)
+      console.log(session)
       setLoading(false)
       message.success('Login successful')
       // setState({ user: data.data.data, token: data.data.token })
       
       values = {}
       // router.push('/user/dashboard')
-      router.push('/dashboard/main')
+      // router.push('/dashboard/main')
     } catch (error) {
       message.error(error.message)
     }
