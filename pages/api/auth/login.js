@@ -1,5 +1,5 @@
 import dbConnect from '../../../lib/Dbconnect'
-import User from '../../../models/User'
+import User from '../../models/User'
 import bcrypt from 'bcrypt'
 import { sign } from 'jsonwebtoken'
 import { serialize } from 'cookie'

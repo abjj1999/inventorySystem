@@ -8,6 +8,7 @@ import { signIn, useSession } from 'next-auth/react'
 
 
 
+
 const Login = () => {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
@@ -26,10 +27,15 @@ const Login = () => {
       console.log(res)
       console.log(session)
       setLoading(false)
-      message.success('Login successful')
+      if(res.error){
+        message.error(res.error)
+      }else {
+        message.success('Login successful')
+        router.push('/dashboard/main')
+      }
       // setState({ user: data.data.data, token: data.data.token })
       
-      values = {}
+      // values = {}
       // router.push('/user/dashboard')
       // router.push('/dashboard/main')
     } catch (error) {
