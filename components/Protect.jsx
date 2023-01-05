@@ -19,7 +19,7 @@ const Protect = ({children}) => {
             setIsAuth(false)
         }
     }, [session])
-  return !isAuth ? <div>you not sign in</div> : <div>
+  return !isAuth && !state ? <div>you not sign in</div> : <div>
     {children}
   </div>
 }

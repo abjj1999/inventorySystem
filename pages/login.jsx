@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { signIn, useSession } from 'next-auth/react'
+import { UserContext } from '../context'
 
 
 
@@ -13,7 +14,7 @@ const Login = () => {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
   const {data: session, status} = useSession()
-  // const [state, setState] = useContext(userContext)
+  const [state, setState] = useContext(UserContext)
   
   const onFinish = async (values) => {
     try {
@@ -26,6 +27,11 @@ const Login = () => {
       })
       console.log(res)
       console.log(session)
+      
+        const user = await axios.post(`/api/user`, {email: session.user.email})
+        // console.log("suer data in protected", user.data)
+        setState({user: user.data})
+      
       setLoading(false)
       if(res.error){
         message.error(res.error)

@@ -5,7 +5,7 @@ import { UserContext } from '../context'
 const Navbar = () => {
   const { data: session, status } = useSession()
   const [state, setState] = useContext(UserContext)
-  console.log("state form nav", state.user.data.email)
+  console.log(state)
   const handleLogout =  () => {
     setState({user: null})
     signOut()
@@ -17,7 +17,7 @@ const Navbar = () => {
       <div className='d-flex text-dark align-items-center justify-content-center gap-3'>
         <div className='mt-1'>
 
-        {!state.user.data.name? <h5>Hi, {state.user.data.email}</h5> : <h5>Hi, {state.user.data.name}</h5>}
+        {!state.user.data ? <h5>Hi, {state.user.data.email}</h5> : <h5>Hi, {state.user.data.email}</h5>}
         </div>
         <button onClick={() => handleLogout()} className='btn btn-danger'>
           Sign Out
