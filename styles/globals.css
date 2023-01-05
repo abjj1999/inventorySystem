@@ -18,3 +18,22 @@
     display: block;
     margin-top: 50px;
 }
+
+.main-layout{
+    height: 95vh;
+}
+.navbar-container{
+    height: 7vh;
+}
+.main{
+    height: 88vh;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.sidebar-menu {
+    flex: 6;
+    border-radius: 15px;
+
+    
+}

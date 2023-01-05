@@ -4,6 +4,7 @@ import connectDB from "../../../lib/Dbconnect";
 import User from "../../models/User";
 import bcrypt from "bcrypt";
 
+
 connectDB();
 export default NextAuth({
   session: {
@@ -16,7 +17,9 @@ export default NextAuth({
       async authorize(credentials, req) {
         const { email, password } = credentials;
         // Add logic here to look up the user from the credentials supplied in db
-        const foundUser = await User.findOne({ email})
+        const foundUser = await User.findOne({ email })
+        // const [state, setState] = useContext(UserContext)
+        // console.log("state here",state)
         if (!foundUser) {
             throw new Error('User does not exist')
         }
@@ -26,7 +29,7 @@ export default NextAuth({
         }
         // console.log(foundUser._id.toString())
         const user = {email: foundUser.email ,  Id: foundUser._id.toString()}
-        console.log(user)
+        // console.log(user)
 
         return user;
          

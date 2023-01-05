@@ -8,9 +8,9 @@ export default async function handler(req, res) {
         case 'POST':
             // Get data from your database
             const user = await User.findOne({ email: req.body.email }).select('-password')
-            console.log(user)
+            // console.log(user)
 
-            res.status(200).json({ success: true})
+            res.status(200).json({ success: true, data: user})
 
     }
   }

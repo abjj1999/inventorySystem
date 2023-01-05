@@ -1,28 +1,28 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { useSession, signOut, getSession } from 'next-auth/react'
 import Protect from '../../components/Protect'
-import axios from 'axios'
+import Navbar from '../../components/Navbar'
+// import axios from 'axios'
+import { UserContext } from '../../context';
+import Sidebar from '../../components/Sidebar';
+import Layout from '../../components/Layout';
 const main = () => {
 
   const { data: session, status } = useSession()
-  React.useEffect(() => {
-    const getUser = async () => {
-      const user = await axios.post(`/api/user`, {email: session.user.email})
-      console.log(user.data)
-
-    }
-    getUser()
-  }, [session])
+  const [state] = useContext(UserContext);
   if(status === 'authenticated'){
+    
     return (
-      <Protect>
+      <Layout>
+        
+      
 
-      <div>
         welcome {session.user.email} <br />
         <p>account dashboard</p> <br />
         <button onClick={() => signOut()}>Logout</button>
-      </div>
-      </Protect>
+        
+      
+      </Layout>
     )
   }else {
     return (
